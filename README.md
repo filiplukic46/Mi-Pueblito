@@ -19,6 +19,8 @@ node scripts/serve.mjs 4417   # preview the build at http://127.0.0.1:4417
 
 `dist/` is a plain static site and can be deployed to any static host (Netlify, Vercel, Cloudflare Pages).
 
+Temporary preview: every push to `main` deploys to https://filiplukic46.github.io/Mi-Pueblito/ through `.github/workflows/deploy.yml` (marked noindex). Repo Settings > Pages > Source must be set to GitHub Actions.
+
 ## Content
 
 All visible copy, links and photos are in `src/data/site.ts`. Open items to confirm with the client:

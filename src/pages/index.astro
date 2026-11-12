@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Print from '../components/Print.astro';
 import Button from '../components/Button.astro';
 import { getImage } from 'astro:assets';
-import { site, hero, about, chapters, order, wall, work } from '../data/site';
+import { site, hero, about, chapters, order, wall, work, url } from '../data/site';
 import heroPortrait from '../assets/photos/hero-fajitas-portrait.jpg';
 
 const previews = await Promise.all(
@@ -168,7 +168,7 @@ const stars = star.repeat(5);
         <dl class="fact-block"><dt>Call or write</dt><dd><a class="link" href={site.phoneHref}>{site.phone}</a><br /><a class="link small" href={`mailto:${site.email}`}>{site.email}</a></dd></dl>
         <ul class="facts"><li>BYOB</li><li>Outdoor seating</li><li>Vegetarian and vegan options</li></ul>
         <div class="btns">
-          <Button href="/visit/">Plan your visit</Button>
+          <Button href={url('/visit/')}>Plan your visit</Button>
           <Button href={site.giftCards}>Gift cards</Button>
         </div>
       </div>

@@ -1,6 +1,8 @@
 ---
 import { ClientRouter } from 'astro:transitions';
-import { site } from '../data/site';
+import { site, url } from '../data/site';
+import gambetta500 from '../assets/fonts/gambetta-500-normal.woff2?url';
+import switzer400 from '../assets/fonts/switzer-400-normal.woff2?url';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/tokens.css';
@@ -8,7 +10,7 @@ import '../styles/engine.css';
 import '../styles/site.css';
 
 interface Props { title?: string; description?: string; image?: string }
-const { title, description = site.description, image = '/og.png' } = Astro.props;
+const { title, description = site.description, image = url('/og.png') } = Astro.props;
 const fullTitle = title ? `${title} | ${site.name}, Medford NJ` : `${site.fullName} | Medford, NJ`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
 const ogImage = new URL(image, Astro.site ?? site.url).href;
@@ -44,9 +46,10 @@ const jsonLd = {
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" content="#141512" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
+    <link rel="apple-touch-icon" href={url('/apple-touch-icon.png')} />
+    <link rel="sitemap" href={url('/sitemap-index.xml')} />
+    {import.meta.env.PUBLIC_NOINDEX && <meta name="robots" content="noindex" />}
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.fullName} />
     <meta property="og:title" content={fullTitle} />
@@ -60,8 +63,8 @@ const jsonLd = {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-    <link rel="preload" href="/fonts/gambetta-500-normal.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/switzer-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={gambetta500} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={switzer400} as="font" type="font/woff2" crossorigin />
     <slot name="head" />
     <script is:inline>
       document.documentElement.classList.add('js');

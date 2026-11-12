@@ -32,6 +32,10 @@ import staffThree from '../assets/photos/staff-three.jpg';
 import exteriorFront from '../assets/photos/exterior-front.jpg';
 import birriaOverhead from '../assets/photos/birria-overhead.jpg';
 
+// Internal links go through `url()` so the site also works under a sub-path (GitHub Pages preview at /Mi-Pueblito/).
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+export const url = (p: string) => `${BASE}${p}`;
+
 const EMAIL = 'mi.pueblito.official@gmail.com';
 const mail = (subject: string) => `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}`;
 
@@ -67,9 +71,9 @@ export const site = {
 
 export const nav = [
   { label: 'Menu', href: site.menu, external: true },
-  { label: 'Order', href: '/#order' },
-  { label: 'Catering & parties', href: '/#gather' },
-  { label: 'Visit', href: '/visit/' },
+  { label: 'Order', href: url('/#order') },
+  { label: 'Catering & parties', href: url('/#gather') },
+  { label: 'Visit', href: url('/visit/') },
 ];
 
 export const hero = {
