@@ -1,0 +1,58 @@
+---
+import Base from '../layouts/Base.astro';
+import Print from '../components/Print.astro';
+import Button from '../components/Button.astro';
+import { site, visit, chapters } from '../data/site';
+---
+<Base title="Visit, hours and reservations" description="Hours, address and how to reserve at Mi Pueblito in Ironstone Village, Medford NJ. Open daily 11:00 am to 9:30 pm, BYOB, with outdoor seating.">
+  <section class="wrap page-hero">
+    <div class="grid">
+      <h1 class="display t-xl" data-split="lines" data-intro>Visit us in Ironstone Village</h1>
+      <p class="sub" data-reveal="fade" data-intro data-delay="0.4">Open every day of the week, for lunch, dinner and everything between.</p>
+      <Print src={visit.image} alt={visit.alt} label="560 Stokes Rd" sizes="100vw" class="visit-print" eager widths={[640, 800, 1100, 1600, 2400]} quality={64}  />
+    </div>
+  </section>
+  <section class="section section--tight wrap" aria-label="Visit details">
+    <div class="grid info-grid">
+      <div class="info info--wide">
+        <h2>Hours</h2>
+        <p class="display t-l tabular info__time">{site.hours.time}</p>
+        <p>{site.hours.label}, lunch and dinner, patio included.</p>
+      </div>
+      <div class="info">
+        <h2>Address</h2>
+        <p>{site.address.street}<br />{site.address.area}<br />{site.address.city}, {site.address.region} {site.address.zip}</p>
+        <p><a class="link" href={site.directions} target="_blank" rel="noopener">Get directions<span class="sr-only"> (opens Google Maps in a new tab)</span></a></p>
+      </div>
+      <div class="info">
+        <h2>Reserve a table</h2>
+        <p>Call us to reserve a table in the dining room or out on the patio.</p>
+        <div class="btns"><Button href={site.phoneHref} primary>Call {site.phone}</Button></div>
+      </div>
+      <Print src={chapters[1].image} alt={chapters[1].alt} label="By the front windows" sizes="(max-width: 860px) 100vw, 32vw" class="info-print" widths={[480, 800, 1200]} />
+      <div class="info">
+        <h2>Bring your own bottle</h2>
+        <p>Mi Pueblito is BYOB. Bring the wine or beer you like to go with your meal.</p>
+      </div>
+      <div class="info">
+        <h2>Parties and catering</h2>
+        <p>Tell us the date, the number of guests and what you are celebrating, and we will write back with options.</p>
+        <div class="btns"><Button href={site.links.party}>Book a party</Button><Button href={site.links.catering}>Catering</Button></div>
+      </div>
+      <div class="info">
+        <h2>Gift cards</h2>
+        <p>A dinner at Mi Pueblito makes an easy present.</p>
+        <div class="btns"><Button href={site.giftCards}>Gift cards</Button></div>
+      </div>
+      <div class="info">
+        <h2>Good to know</h2>
+        <ul><li>Family-owned</li><li>Outdoor seating</li><li>Vegetarian and vegan options</li><li>Pickup through DoorDash and Tabit</li></ul>
+      </div>
+      <div class="info">
+        <h2>Write to us</h2>
+        <p><a class="link" href={`mailto:${site.email}`}>{site.email}</a></p>
+        <ul>{site.socials.map((s) => <li><a class="link" href={s.href} target="_blank" rel="noopener">{s.label}</a></li>)}</ul>
+      </div>
+    </div>
+  </section>
+</Base>

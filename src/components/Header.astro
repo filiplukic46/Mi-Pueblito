@@ -1,0 +1,30 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/logo-light.png';
+import { nav, site } from '../data/site';
+import Button from './Button.astro';
+const path = Astro.url.pathname;
+---
+<header class="header">
+  <a class="header__logo" href="/" aria-label="Mi Pueblito, home">
+    <Image src={logo} alt="" widths={[280, 420]} sizes="140px" loading="eager" />
+  </a>
+  <nav class="header__nav" aria-label="Main">
+    <ul>
+      {nav.map((n) => (
+        <li><a class="draw" href={n.href} aria-current={n.href === path ? 'page' : undefined} {...(n.external ? { target: '_blank', rel: 'noopener' } : {})}>{n.label}{n.external && <span class="sr-only"> (opens in a new tab)</span>}</a></li>
+      ))}
+    </ul>
+    <Button href="/#order" primary>Order online</Button>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu" data-menu-open>Menu</button>
+  </nav>
+  <div class="menu" id="menu" hidden data-menu>
+    <button class="menu__close" type="button" data-menu-close>Close</button>
+    <ul>
+      {nav.map((n) => (
+        <li><a class="menu__link" href={n.href} {...(n.external ? { target: '_blank', rel: 'noopener' } : {})}>{n.label}</a></li>
+      ))}
+    </ul>
+    <div class="btns"><Button href="/#order" primary>Order online</Button><Button href={site.phoneHref}>Call {site.phone}</Button></div>
+  </div>
+</header>

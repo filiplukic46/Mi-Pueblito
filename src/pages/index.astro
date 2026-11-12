@@ -1,0 +1,177 @@
+---
+import Base from '../layouts/Base.astro';
+import Print from '../components/Print.astro';
+import Button from '../components/Button.astro';
+import { getImage } from 'astro:assets';
+import { site, hero, about, chapters, order, wall, work } from '../data/site';
+import heroPortrait from '../assets/photos/hero-fajitas-portrait.jpg';
+
+const previews = await Promise.all(
+  order.dishes.map((d) => getImage({ src: d.image, width: 720, format: 'webp', quality: 72 }))
+);
+const thumbs = await Promise.all(
+  order.dishes.map((d) => getImage({ src: d.image, width: 240, format: 'webp', quality: 70 }))
+);
+const heroImg = await getImage({ src: hero.image, widths: [640, 800, 1100, 1600, 2400], format: 'webp', quality: 64 });
+const heroMob = await getImage({ src: heroPortrait, widths: [560, 780], format: 'webp', quality: 52 });
+const wallClass = ['w-sign', 'w-dining', 'w-paella', 'w-team', 'w-chips', 'w-kitchen'];
+const wallSizes = ['(max-width: 860px) 72vw, 32vw', '(max-width: 860px) 100vw, 48vw', '(max-width: 860px) 64vw, 24vw', '(max-width: 860px) 100vw, 56vw', '(max-width: 860px) 72vw, 24vw', '(max-width: 860px) 64vw, 24vw'];
+const star = '<svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7.3L12 17.8 5.7 21.5l1.7-7.3L2 9.5l7.1-.6z"/></svg>';
+const stars = star.repeat(5);
+---
+<Base>
+  <link slot="head" rel="preload" as="image" media="(min-width: 861px)" imagesrcset={heroImg.srcSet.attribute} imagesizes="100vw" fetchpriority="high" />
+  <link slot="head" rel="preload" as="image" media="(max-width: 860px)" imagesrcset={heroMob.srcSet.attribute} imagesizes="100vw" fetchpriority="high" />
+  <!-- HERO: a B&W print the visitor develops into color -->
+  <section class="hero" aria-labelledby="hero-title" data-hero>
+    <Print src={hero.image} alt={hero.alt} label={hero.label} sizes="100vw" mobile={heroPortrait} eager kind="food" attrs={{ 'data-lens-hero': '' }} widths={[640, 800, 1100, 1600, 2400]} quality={64} />
+    <div class="hero__scrim" aria-hidden="true"></div>
+    <div class="hero__content">
+      <div class="hero__title">
+        <h1 class="hero__h1" data-reveal="fade" data-intro data-delay="0.5"><span class="flag" aria-hidden="true"><i></i><i></i><i></i></span>{hero.h1}</h1>
+        <h2 class="display hero__h2 t-xl" id="hero-title">
+          <span class="old" data-hero-line>{hero.h2a}</span>
+          <span class="new" data-hero-line>{hero.h2b}</span>
+        </h2>
+      </div>
+      <div class="hero__side" data-reveal="fade" data-intro data-delay="0.9">
+        <p class="small">{site.hours.label}, <span class="tabular">{site.hours.time}</span></p>
+        <Button href="#order" primary>Order online</Button>
+        <p class="hero__hint" aria-hidden="true"><span class="fine">Move across the photo to see it in color</span><span class="touch">Every photo here develops into color</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT: asymmetric pair -->
+  <section class="section wrap" aria-labelledby="about-title">
+    <div class="grid">
+      <h2 class="display t-l about__title" id="about-title" data-split="lines">{about.title}</h2>
+      <Print src={about.room.src} alt={about.room.alt} label={about.room.label} sizes="(max-width: 860px) 86vw, 40vw" class="about__room" attrs={{ 'data-reveal': 'clip' }} />
+      <div class="about__text">
+        <p class="about__statement" data-split="lines">{about.p1}</p>
+      </div>
+      <div class="about__dish-wrap">
+        <div class="about__aside">
+          <p class="body">{about.p2}</p>
+          <p><a class="link" href={site.menu} target="_blank" rel="noopener">See the full menu<span class="sr-only"> (opens in a new tab)</span></a></p>
+        </div>
+        <Print src={about.dish.src} alt={about.dish.alt} label={about.dish.label} sizes="(max-width: 860px) 70vw, 32vw" class="about__dish" kind="food" widths={[480, 800, 1200]} attrs={{ 'data-reveal': 'clip' }} />
+      </div>
+    </div>
+  </section>
+
+  <!-- GATHER: sticky darkroom stage -->
+  <section class="section gather wrap" id="gather" aria-label="Catering, private parties and reservations">
+    <div class="grid">
+      <div class="gather__stage" data-stage aria-hidden="true">
+        {chapters.map((c, i) => (
+          <Print src={c.image} alt="" sizes="50vw" kind="stage" class={i === 0 ? 'is-on' : ''} attrs={{ 'data-stage-print': String(i), 'data-label': c.label }} />
+        ))}
+      </div>
+      <div class="gather__chapters">
+        {chapters.map((c, i) => (
+          <article class="chapter" id={c.id} data-chapter={String(i)} aria-labelledby={`${c.id}-title`}>
+            <Print src={c.image} alt={c.alt} label={c.label} sizes="100vw" class="chapter__print" kind="food" widths={[480, 800, 1200]} />
+            <h2 class="display t-l" id={`${c.id}-title`} data-split="lines">{c.title}</h2>
+            <p class="sub">{c.sub}</p>
+            <p class="body">{c.body}</p>
+            <div class="btns"><Button href={c.cta.href} primary={i === 2}>{c.cta.label}</Button></div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ORDER: the dish index -->
+  <section class="section section--tight wrap" id="order" aria-labelledby="order-title">
+    <div class="grid">
+      <div class="order__head">
+        <h2 class="display t-xl" id="order-title" data-split="lines">{order.title}</h2>
+        <p class="sub" style="margin-top:1.2rem">{order.sub}</p>
+      </div>
+      <div class="order__aside">
+        <p class="body">{order.body}</p>
+        <div class="btns">
+          <Button href={site.order.doordash} primary>DoorDash</Button>
+          <Button href={site.order.tabit}>Tabit</Button>
+        </div>
+      </div>
+    </div>
+    <ul class="dishes" data-index>
+      {order.dishes.map((d, i) => (
+        <li class="dish">
+          <a href={site.order.doordash} target="_blank" rel="noopener" data-preview={previews[i].src} data-name={d.name}>
+            <img class="dish__thumb" src={thumbs[i].src} alt="" width="240" height="240" loading="lazy" decoding="async" style="object-fit:cover;height:auto" />
+            <span class="dish__name"><span>{d.name}</span>{i === 0 && <span class="dish__note">{order.note}</span>}</span>
+            <span class="dish__group">{d.group}</span>
+            <span class="dish__go">Order <svg width="16" height="10" viewBox="0 0 16 10" aria-hidden="true"><path d="M0 5h14M10 1l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></span>
+            <span class="sr-only"> on DoorDash (opens in a new tab)</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p style="margin-top:2rem"><a class="link" href={site.menu} target="_blank" rel="noopener">The full menu, with every taco and plate<span class="sr-only"> (opens in a new tab)</span></a></p>
+    <div class="preview" aria-hidden="true" data-preview-box>
+      <figure class="print" data-develop="preview" style="width:100%;height:100%">
+        <img class="print__base" alt="" src={previews[0].src} width="720" height="480" />
+        <img class="print__color" alt="" src={previews[0].src} width="720" height="480" />
+        <figcaption class="print__label" data-preview-label></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- THE WALL: prints and reviews -->
+  <section class="section wrap" aria-labelledby="wall-title">
+    <div class="grid">
+      <div class="wall__head">
+        <h2 class="display t-l" id="wall-title" data-split="lines">{wall.title}</h2>
+        <span class="hand">{wall.sub}</span>
+      </div>
+    </div>
+    <div class="grid wall__grid">
+      <Print {...wall.prints[0]} sizes={wallSizes[0]} class={wallClass[0]} widths={[480, 800, 1200]} attrs={{ 'data-reveal': 'clip' }} />
+      <figure class="review w-r1"><blockquote>“{wall.reviews[1].text}”</blockquote><figcaption><span class="stars" set:html={stars} /><span>{wall.reviews[1].name}, Google review</span></figcaption></figure>
+      <Print {...wall.prints[1]} sizes={wallSizes[1]} class={wallClass[1]} attrs={{ 'data-reveal': 'clip' }} />
+      <Print {...wall.prints[2]} sizes={wallSizes[2]} class={wallClass[2]} kind="food" widths={[480, 800]} attrs={{ 'data-reveal': 'clip' }} />
+      <figure class="review w-r2"><blockquote>“{wall.reviews[0].text}”</blockquote><figcaption><span class="stars" set:html={stars} /><span>{wall.reviews[0].name}, Google review</span></figcaption></figure>
+      <Print {...wall.prints[3]} sizes={wallSizes[3]} class={wallClass[3]} attrs={{ 'data-reveal': 'clip' }} />
+      <figure class="review w-r3"><blockquote>“{wall.reviews[2].text}”</blockquote><figcaption><span class="stars" set:html={stars} /><span>{wall.reviews[2].name}, Google review</span></figcaption></figure>
+      <Print {...wall.prints[4]} sizes={wallSizes[4]} class={wallClass[4]} kind="food" widths={[480, 800]} attrs={{ 'data-reveal': 'clip' }} />
+      <Print {...wall.prints[5]} sizes={wallSizes[5]} class={wallClass[5]} widths={[480, 800]} attrs={{ 'data-reveal': 'clip' }} />
+      <figure class="review w-r4"><blockquote>“{wall.reviews[3].text}”</blockquote><figcaption><span class="stars" set:html={stars} /><span>{wall.reviews[3].name}, Google review</span></figcaption></figure>
+    </div>
+  </section>
+
+  <!-- WORK WITH US -->
+  <section class="section wrap" aria-labelledby="work-title">
+    <div class="grid">
+      <Print src={work.image} alt={work.alt} label={work.label} sizes="(max-width: 860px) 100vw, 56vw" class="work__print" attrs={{ 'data-reveal': 'clip' }} />
+      <div class="work__text">
+        <h2 class="display t-l" id="work-title" data-split="lines">{work.title}</h2>
+        <p class="sub">{work.sub}</p>
+        <p class="body">{work.body}</p>
+        <div class="btns"><Button href={work.cta.href}>{work.cta.label}</Button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISIT: facts -->
+  <section class="section section--tight wrap visit" aria-labelledby="visit-title">
+    <div class="grid">
+      <div class="visit__time">
+        <h2 class="meta" id="visit-title">Hours and location</h2>
+        <span class="meta">{site.hours.label}, lunch and dinner</span>
+        <p class="display tabular" data-split="lines">11:00 am<br />to 9:30 pm</p>
+      </div>
+      <div class="visit__facts">
+        <dl class="fact-block"><dt>Find us</dt><dd>{site.address.street}<br />{site.address.area}, {site.address.city}, {site.address.region}</dd></dl>
+        <dl class="fact-block"><dt>Call or write</dt><dd><a class="link" href={site.phoneHref}>{site.phone}</a><br /><a class="link small" href={`mailto:${site.email}`}>{site.email}</a></dd></dl>
+        <ul class="facts"><li>BYOB</li><li>Outdoor seating</li><li>Vegetarian and vegan options</li></ul>
+        <div class="btns">
+          <Button href="/visit/">Plan your visit</Button>
+          <Button href={site.giftCards}>Gift cards</Button>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+---
+<Base title="Page not found" description="This page is not on the Mi Pueblito site. Head back to the home page for the menu, online ordering and our hours.">
+  <section class="wrap nf">
+    <div class="grid">
+      <div class="nf__text">
+        <h1 class="display t-xl" data-split="lines" data-intro>Still developing</h1>
+        <p class="body">This page never made it out of the darkroom. The rest of the site is ready, though.</p>
+        <div class="btns" data-reveal="fade" data-intro data-delay="0.45"><Button href="/" primary>Back to the home page</Button><Button href="/#order">Order online</Button></div>
+      </div>
+      <div class="nf__frame" aria-hidden="true"><span class="hand">nothing here yet</span></div>
+    </div>
+  </section>
+</Base>

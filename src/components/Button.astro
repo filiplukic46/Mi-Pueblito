@@ -1,0 +1,8 @@
+---
+interface Props { href: string; primary?: boolean; external?: boolean; class?: string }
+const { href, primary = false, external = false, class: cls = '' } = Astro.props;
+const ext = external || href.startsWith('http');
+---
+<a class={`btn ${primary ? 'btn--primary' : ''} ${cls}`} href={href} data-fill {...(ext ? { target: '_blank', rel: 'noopener' } : {})}>
+  <span class="btn__fill" aria-hidden="true"></span><span class="btn__label"><slot /></span>{ext && <span class="sr-only"> (opens in a new tab)</span>}
+</a>

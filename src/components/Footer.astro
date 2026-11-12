@@ -1,0 +1,27 @@
+---
+import { getImage } from 'astro:assets';
+import { site, nav, visit } from '../data/site';
+const bg = await getImage({ src: visit.footerPrint, width: 1600, format: 'webp', quality: 70 });
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="footer__top">
+    <ul aria-label="Pages">
+      {nav.map((n) => <li><a class="draw" href={n.href} {...(n.external ? { target: '_blank', rel: 'noopener' } : {})}>{n.label}</a></li>)}
+      <li><a class="draw" href={site.giftCards} target="_blank" rel="noopener">Gift cards</a></li>
+    </ul>
+    <ul aria-label="Social">
+      {site.socials.map((s) => <li><a class="draw" href={s.href} target="_blank" rel="noopener">{s.label}</a></li>)}
+      <li><a class="draw" href={site.phoneHref}>{site.phone}</a></li>
+    </ul>
+  </div>
+  <div class="word" data-develop="word" aria-hidden="true">
+    <span class="word__base" style={`background-image:url(${bg.src})`}>Mi Pueblito</span>
+    <span class="word__color" style={`background-image:url(${bg.src})`}>Mi Pueblito</span>
+  </div>
+  <div class="footer__bottom">
+    <p>© {year} {site.fullName}</p>
+    <p>{site.address.street}, {site.address.area}, {site.address.city}, {site.address.region}</p>
+    <p><span class="flag" aria-hidden="true"><i></i><i></i><i></i></span></p>
+  </div>
+</footer>
